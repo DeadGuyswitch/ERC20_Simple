@@ -10,10 +10,10 @@ contract NBCoinERC20 {
     string private constant symbol_ = "NBN";
     uint8 private constant decimals_ = 18;
 
-    address private owner;
+    address private owner_;
 
     modifier onlyOwner() {
-        require(msg.sender == owner);
+        require(msg.sender == owner_);
         _;
     }
 
@@ -24,7 +24,7 @@ contract NBCoinERC20 {
     uint256 totalSupply_;
 
     constructor(uint256 total) {
-      owner = msg.sender;
+      owner_ = msg.sender;
       totalSupply_ = total;
       balances[msg.sender] = totalSupply_;
     }
@@ -96,5 +96,26 @@ contract NBCoinERC20 {
    }
 
    // Mint Function 
+   function mint(address account, uint256 amount) onlyOwner internal {
+       // increase the total supply
+       totalSupply_ += amount;
+
+       // increase the balance of the account with minted tokens
+       balances[account] += amount;
+
+       emit Transfer(address(0), account, amount);
+
+   }
+
+   // Burn Function 
+
+   function burn(address account, uint256 amount) onlyOwner internal {
+
+       balances[account] -= amount;
+
+       totalSupply_ -= amount;
+
+       emit Transfer(account, address(0), amount);
+   }
     
 }
