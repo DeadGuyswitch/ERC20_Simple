@@ -76,10 +76,9 @@ contract NBCoinERC20 {
 
    // Allow Spending Function
 
-   function allow_spend(address owner, address spender, uint256 amount)  internal {
-       
+   function allow_spend(address owner, address spender, uint256 amount)  internal {   
        uint256 currentAllowance = allowed[owner][spender];
-       require(currentAllowance >= amount, "ERC0: Insufficient Allowance");
+       require(currentAllowance >= amount, "ERC20: Insufficient Allowance");
        approve(owner, spender, currentAllowance - amount);
 
 
@@ -126,13 +125,13 @@ contract NBCoinERC20 {
 
     // Function for an allowed account to burn their tokens
    function burn(address account, uint256 amount) public {
-       allow_spend(account, msg.sender, amount);
+       allow_spend(msg.sender, account, amount);
        _burn(account, amount);
    }
 
    // Function that handles burning of tokens
     function _burn(address account, uint256 amount) internal {
-        require(balances[account] >= amount, "ERC0: Burn amount exceeds balance");
+        require(balances[account] >= amount, "ERC20: Burn amount exceeds balance");
         balances[account] -= amount;
 
         totalSupply_ -= amount;

@@ -308,11 +308,11 @@
 	},
 	"sources": {
 		"contracts/NBCoin.sol": {
-			"keccak256": "0xff33ec5f78d93bfa54f356993911431342d969d91a4032945ba988a943e64a1d",
+			"keccak256": "0x9ef127ac3d934b5c5790fd4bf3beff4e76e23f1405e4274c9101be004bbba064",
 			"license": "GPL-3.0",
 			"urls": [
-				"bzz-raw://62b090e5094123d51b83fdc801b26977d3dcc6d03dc10d69ad8c629dd2f48e38",
-				"dweb:/ipfs/QmdcyhXhEbrEuNHYxutkpEFP4GMvbiFkwJuc5nSyY3HHe4"
+				"bzz-raw://83a58127a72ecb4c1df60380d7843a448e8cfc1857b9255eaa6c173e03bb5252",
+				"dweb:/ipfs/QmVB3fGJZ1E1GHcTLzQ8ynQ1SGeG2keLH4cMVxdyUxmp2E"
 			]
 		}
 	},
