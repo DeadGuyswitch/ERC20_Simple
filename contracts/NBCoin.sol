@@ -65,12 +65,24 @@ contract NBCoinERC20 {
        return allowed[owner][spender];
    }
 
-
+    
     // Approval function to assign allowance to another address 
 
-   function approve(address spender, uint256 amount) public returns(bool) {
-       allowed[msg.sender][spender] = amount;
-       emit Approval(msg.sender, spender, amount);
+   function approve(address owner, address spender, uint256 amount) public returns(bool) {
+       allowed[owner][spender] = amount;
+       emit Approval(owner, spender, amount);
+       return true;
+   }
+
+   // Allow Spending Function
+
+   function allow_spend(address owner, address spender, uint256 amount)  internal {
+       
+       uint256 currentAllowance = allowed[owner][spender];
+       require(currentAllowance >= amount, "ERC0: Insufficient Allowance");
+       approve(owner, spender, currentAllowance - amount);
+
+
    }
 
    // Transfer and TransferFrom functions
@@ -95,27 +107,37 @@ contract NBCoinERC20 {
        return true;
    }
 
-   // Mint Function 
-   function mint(address account, uint256 amount) onlyOwner internal {
-       // increase the total supply
+   // Function to allow minting of tokens. To be used by the contract owner 
+   function mint(address receiver, uint256 amount) public onlyOwner {
+       _mint(receiver, amount);
+   }
+
+   // Internal function. Handles minting tokens to an account
+
+   function _mint(address receiver, uint256 amount) internal {
+       // Increase the total supply
        totalSupply_ += amount;
+        // Increase the balance of the receiver of minted tokens
+       balances[receiver] += amount;
 
-       // increase the balance of the account with minted tokens
-       balances[account] += amount;
-
-       emit Transfer(address(0), account, amount);
-
+       emit Transfer(address(0), receiver, amount);
    }
 
-   // Burn Function 
 
-   function burn(address account, uint256 amount) onlyOwner internal {
-
-       balances[account] -= amount;
-
-       totalSupply_ -= amount;
-
-       emit Transfer(account, address(0), amount);
+    // Function for an allowed account to burn their tokens
+   function burn(address account, uint256 amount) public {
+       allow_spend(account, msg.sender, amount);
+       _burn(account, amount);
    }
+
+   // Function that handles burning of tokens
+    function _burn(address account, uint256 amount) internal {
+        require(balances[account] >= amount, "ERC0: Burn amount exceeds balance");
+        balances[account] -= amount;
+
+        totalSupply_ -= amount;
+
+        emit Transfer(account, address(0), amount);
+    }
     
 }
